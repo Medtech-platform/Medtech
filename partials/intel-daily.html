@@ -1,0 +1,152 @@
+<div class="page-header">
+  <div class="tag">📰 Intel Daily</div>
+  <h2>Intel Daily — Automated News Intelligence</h2>
+  <p>Pulls today's articles from RSS feeds and Feedly, scores relevance with Gemini AI, and emails your daily digest automatically. All keys live on the server — nothing secret ever reaches this browser tab.</p>
+</div>
+
+<div style="border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow-l);border:1px solid var(--border)">
+
+  <div class="id-topbar-inner">
+    <div class="id-brand">
+      <div class="id-brand-mark">ID</div>
+      <div><div class="id-brand-name">Intel Daily</div><div class="id-brand-sub">AI-Powered News Intelligence</div></div>
+    </div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <div class="id-date" id="id-hdrDate"></div>
+      <div class="id-status-chip"><div class="id-dot-live"></div><span id="id-statusText">Ready</span></div>
+    </div>
+  </div>
+
+  <div class="id-banner ok">
+    <span>⏰</span>
+    <span><strong>Fully automated.</strong> Netlify runs this whole pipeline on a schedule and emails the digest — no open tab needed. Use "Run now" below any time for an on-demand check.</span>
+  </div>
+
+  <div class="id-tabs">
+    <div class="id-tab active" data-id-tab="run">⚡ Run Daily</div>
+    <div class="id-tab" data-id-tab="email">📧 Last Email <span class="id-tab-badge" id="id-emailBadge" style="display:none">0</span></div>
+    <div class="id-tab" data-id-tab="feeds">📰 Sources & Rules</div>
+    <div class="id-tab" data-id-tab="setup">⚙️ Setup Status</div>
+  </div>
+
+  <div class="id-body">
+
+    <!-- RUN TAB -->
+    <div class="id-panel active" id="id-panel-run">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:20px;flex-wrap:wrap">
+        <div>
+          <div style="font-size:20px;font-weight:700">Today's Intelligence Run</div>
+          <div style="font-size:13px;color:rgba(11,15,26,.5);margin-top:4px">Calls one secure server endpoint that fetches RSS + Feedly, scores with Gemini, and (optionally) emails the result.</div>
+        </div>
+        <div style="display:flex;gap:9px;align-items:center;flex-wrap:wrap">
+          <button class="btn btn-ghost btn-sm" data-id-tab-btn="feeds">📰 Manage sources</button>
+          <button class="btn btn-primary" id="id-runBtn">▶ Run now</button>
+        </div>
+      </div>
+
+      <div class="id-stats" id="id-statsRow" style="display:none">
+        <div class="id-stat-box"><div class="id-stat-num" id="id-stTotal">0</div><div class="id-stat-lbl">Articles fetched</div></div>
+        <div class="id-stat-box"><div class="id-stat-num" id="id-stHigh" style="color:var(--teal)">0</div><div class="id-stat-lbl">High relevance</div></div>
+        <div class="id-stat-box"><div class="id-stat-num" id="id-stMed" style="color:var(--amber)">0</div><div class="id-stat-lbl">Medium relevance</div></div>
+        <div class="id-stat-box"><div class="id-stat-num" id="id-stEmail">—</div><div class="id-stat-lbl">Email status</div></div>
+      </div>
+
+      <div class="id-prog-wrap" id="id-progWrap" style="display:none">
+        <div style="font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:rgba(11,15,26,.45);margin-bottom:14px">Progress</div>
+        <div class="id-psteps" id="id-progSteps"></div>
+      </div>
+
+      <div id="id-artsSec" style="display:none">
+        <div class="id-arts-toolbar">
+          <div>
+            <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:rgba(11,15,26,.45);margin-bottom:4px">Scored articles</div>
+            <div style="font-size:12px;color:rgba(11,15,26,.5)" id="id-artCountLbl"></div>
+          </div>
+          <div class="id-fpills">
+            <button class="id-fpill on" data-id-filter="all">All</button>
+            <button class="id-fpill" data-id-filter="high">🟢 High</button>
+            <button class="id-fpill" data-id-filter="medium">🟡 Medium</button>
+            <button class="id-fpill" data-id-filter="low">⚪ Low</button>
+          </div>
+        </div>
+        <div id="id-artsGrid"></div>
+      </div>
+
+      <div class="id-empty" id="id-emptyRun">
+        <div class="id-empty-icon">⚡</div>
+        <div class="id-empty-title">Ready to run</div>
+        <div class="id-empty-sub">Click <strong>Run now</strong> to fetch, score, and preview today's digest.<br>The scheduled version runs automatically every morning even if this page is closed.</div>
+      </div>
+    </div>
+
+    <!-- EMAIL TAB -->
+    <div class="id-panel" id="id-panel-email">
+      <div class="id-empty" id="id-emailEmpty">
+        <div class="id-empty-icon">📧</div>
+        <div class="id-empty-title">No run yet</div>
+        <div class="id-empty-sub">Run the daily scan first — the high-relevance articles from your most recent run appear here.</div>
+      </div>
+      <div id="id-emailContent" style="display:none">
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap">
+          <div style="flex:1"><div style="font-size:18px;font-weight:700">Last Digest Preview</div><div style="font-size:12px;color:rgba(11,15,26,.5);margin-top:3px" id="id-emailArtCount"></div></div>
+          <button class="btn btn-ghost btn-sm" id="id-copyBtn">📋 Copy</button>
+        </div>
+        <div class="id-email-wrap">
+          <div class="id-email-body" id="id-eBody"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FEEDS TAB -->
+    <div class="id-panel" id="id-panel-feeds">
+      <div class="card" style="border-radius:var(--r);margin-bottom:16px">
+        <div style="font-size:14px;font-weight:600;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--mist-2)">📰 Sources</div>
+        <p style="font-size:13px;color:rgba(11,15,26,.5);margin-bottom:16px">
+          RSS sources (public, free) are fetched by the server. Feedly is pulled from the board configured with your Feedly token on the server (see Setup Status tab). Neither needs anything typed in here.
+        </p>
+        <div id="id-rssList" style="font-size:13px;color:var(--ink-3);display:flex;flex-direction:column;gap:6px"></div>
+      </div>
+
+      <div class="card" style="border-radius:var(--r)">
+        <div style="font-size:14px;font-weight:600;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--mist-2)">🎯 Relevance Rules</div>
+        <p class="id-hint" style="margin-bottom:12px">These are not secret — saved in this browser and sent along with each run to steer the AI scoring.</p>
+        <div class="id-fg"><label class="id-lbl">HIGH relevance — what topics matter most?</label><textarea class="id-input" id="id-highRule" rows="3"></textarea></div>
+        <div class="id-fg"><label class="id-lbl">MEDIUM relevance — adjacent / useful but not urgent</label><textarea class="id-input" id="id-medRule" rows="2"></textarea></div>
+        <div class="id-fg"><label class="id-lbl">Exclude / LOW — topics to deprioritize</label><textarea class="id-input" id="id-lowRule" rows="2"></textarea></div>
+        <div class="id-fg"><label class="id-lbl">Org context (helps the AI judge relevance)</label><textarea class="id-input" id="id-orgContext" rows="2"></textarea></div>
+        <button class="btn btn-primary btn-sm" id="id-saveRulesBtn">💾 Save rules</button>
+      </div>
+    </div>
+
+    <!-- SETUP STATUS TAB (no secrets typed here - just status + instructions) -->
+    <div class="id-panel" id="id-panel-setup">
+      <div class="card" style="border-radius:var(--r);margin-bottom:16px">
+        <div style="font-size:14px;font-weight:600;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--mist-2)">🔑 Where the keys live</div>
+        <div class="id-setup-step">
+          <div class="id-step-num">1</div>
+          <div class="id-step-body">
+            <div class="id-step-title">Gemini, Feedly, and email keys are set in Netlify — not in this page</div>
+            <div class="id-step-desc">Go to your Netlify site → <strong>Site settings → Environment variables</strong> and add: <code>GEMINI_API_KEY</code>, <code>FEEDLY_ACCESS_TOKEN</code>, <code>FEEDLY_STREAM_ID</code>, <code>RESEND_API_KEY</code>, <code>DIGEST_TO_EMAIL</code>, <code>DIGEST_FROM_EMAIL</code>. Full steps are in the README that ships with this project.</div>
+          </div>
+        </div>
+        <div class="id-setup-step">
+          <div class="id-step-num">2</div>
+          <div class="id-step-body">
+            <div class="id-step-title">Why this way</div>
+            <div class="id-step-desc">Anything typed into a browser page is visible to anyone who opens developer tools. Netlify environment variables are only readable by your own server-side functions, so this is the version of the app that's actually safe to hand to a client.</div>
+          </div>
+        </div>
+        <button class="btn btn-ghost btn-sm" id="id-checkStatusBtn">🧪 Check server status</button>
+        <div id="id-statusResult" style="margin-top:10px;font-size:13px;display:none"></div>
+      </div>
+
+      <div class="id-sched-box">
+        <div class="id-sched-title">⏰ Automatic daily schedule</div>
+        <div class="id-sched-body">
+          Set in <code>netlify.toml</code>: the <code>scheduled-digest</code> function runs automatically at <code>0 9 * * *</code> (9:00am UTC) every day and emails the high-relevance articles. Change the cron string in that file to move the time — no code changes needed elsewhere.
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

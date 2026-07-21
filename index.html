@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mind+Machine™ – MedTech Intelligence Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Syne:wght@600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+<button id="hamburger">☰</button>
+
+<aside id="sidebar">
+  <div class="brand">
+    <div class="logo-mark">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+        <rect width="32" height="32" rx="8" fill="url(#grad1)"/>
+        <path d="M8 22 L14 10 L18 17 L22 12 L26 22" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <circle cx="22" cy="12" r="2.5" fill="#00C2A8"/>
+        <defs><linearGradient id="grad1" x1="0" y1="0" x2="32" y2="32"><stop offset="0%" stop-color="#3B6EF8"/><stop offset="100%" stop-color="#1C2235"/></linearGradient></defs>
+      </svg>
+      <div><h1>Mind<span>+</span>Machine™</h1></div>
+    </div>
+    <p>MedTech Intelligence Platform</p>
+  </div>
+
+  <div class="client-badge">
+    <strong id="client-name">Evaluserve — Demo Mode</strong>
+    <span>Opportunity Assessment Suite</span>
+  </div>
+
+  <nav id="sidebar-nav">
+    <div class="nav-section-label">Overview</div>
+    <a href="#" class="active" data-nav="dashboard"><span class="nav-icon">🏠</span> Dashboard</a>
+
+    <div class="nav-section-label">Intelligence Modules</div>
+    <a href="#" data-nav="market-understanding"><span class="nav-icon">🌍</span> Market Understanding <span class="badge">GenAI</span></a>
+    <a href="#" data-nav="opportunity-clustering"><span class="nav-icon">🎯</span> Opportunity Clustering <span class="badge">Agent</span></a>
+    <a href="#" data-nav="competitor-assessment"><span class="nav-icon">⚔️</span> Competitor Assessment <span class="badge">GenAI</span></a>
+    <a href="#" data-nav="product-assessment"><span class="nav-icon">🧬</span> Product Assessment</a>
+    <a href="#" data-nav="regional-market"><span class="nav-icon">📍</span> Regional Market</a>
+    <a href="#" data-nav="innovation-tech"><span class="nav-icon">💡</span> Innovation &amp; Tech <span class="badge">GenAI</span></a>
+    <a href="#" data-nav="market-sizing"><span class="nav-icon">📊</span> Market Sizing <span class="badge">Agent</span></a>
+
+    <div class="nav-section-label">Primary Research</div>
+    <a href="#" data-nav="kol-interviews"><span class="nav-icon">🎙️</span> KOL Interviews</a>
+    <a href="#" data-nav="quant-survey"><span class="nav-icon">📋</span> Quantitative Survey</a>
+    <a href="#" data-nav="signal-consolidation"><span class="nav-icon">⚡</span> Signal Consolidation</a>
+
+    <div class="nav-section-label">Analysis & Output</div>
+    <a href="#" data-nav="opportunity-scoring"><span class="nav-icon">🏆</span> Opportunity Scoring</a>
+    <a href="#" data-nav="strategic-recommendations"><span class="nav-icon">🚀</span> Strategic Recommendations</a>
+
+    <div class="nav-section-label">Daily Intelligence</div>
+    <a href="#" data-nav="intel-daily" style="border-left-color: var(--teal)"><span class="nav-icon">📰</span> Intel Daily <span class="badge" style="background:rgba(245,166,35,0.2);color:var(--amber)">Auto</span></a>
+
+    <div class="nav-section-label">Platform</div>
+    <a href="#" data-nav="ai-agent"><span class="nav-icon">🤖</span> AI Intelligence Engine</a>
+    <a href="#" data-nav="admin"><span class="nav-icon">⚙️</span> Admin / Settings</a>
+  </nav>
+
+  <div class="sidebar-footer">© 2026 Evaluserve · Mind+Machine™ Platform v3.0 (modular)</div>
+</aside>
+
+<div id="main">
+  <header id="topbar">
+    <div class="breadcrumb"><span>Mind+Machine™</span> <span>›</span> <strong id="topbar-title">Dashboard</strong></div>
+    <div class="topbar-right">
+      <button class="btn btn-ghost" data-nav="admin">⚙️ Settings</button>
+      <button class="btn btn-primary" data-nav="ai-agent">🤖 AI Engine</button>
+    </div>
+  </header>
+
+  <section class="module-section active" id="module-content">
+    <div class="empty-state"><p>Loading…</p></div>
+  </section>
+</div>
+
+<div class="id-toast" id="id-toast"></div>
+
+<script src="js/app.js"></script>
+<script src="js/intel-daily.js"></script>
+</body>
+</html>

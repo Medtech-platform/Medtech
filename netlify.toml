@@ -1,0 +1,15 @@
+[build]
+  publish = "."
+  functions = "netlify/functions"
+
+# Runs the whole Intel Daily pipeline automatically every day at 9:00am UTC
+# (no open browser tab required). Adjust the cron string to change the time.
+# Cron format: minute hour day month weekday
+[functions."scheduled-digest"]
+  schedule = "0 9 * * *"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
