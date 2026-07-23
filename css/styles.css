@@ -16,11 +16,12 @@
   --ev-grey-blue:  #B3BAD4;
 
   /* ── Purple Family ── */
-  --ev-purple-d:   #5B21B6;
-  --ev-purple:     #7C3AED;
-  --ev-purple-m:   #A855F7;
-  --ev-lavender:   #C084FC;
-  --ev-purple-bg:  #EDE9FE;
+--ev-dark-purple: #1D012B;
+--ev-purple-d:   #5B21B6;
+--ev-purple:     #7C3AED;
+--ev-purple-m:   #A855F7;
+--ev-lavender:   #C084FC;
+--ev-purple-bg:  #EDE9FE;
 
   /* ── Pink Family ── */
   --ev-pink-d:     #9D174D;
@@ -87,7 +88,7 @@ body {
   top: 0; left: 0;
   width: 260px;
   height: 100vh;
-  background: var(--ev-cobalt);
+  background: var(--ev-dark-purple);
   display: flex;
   flex-direction: column;
   z-index: 1000;
@@ -196,7 +197,7 @@ body {
   position: fixed;
   top: 16px; left: 16px;
   z-index: 1100;
-  background: var(--ev-cobalt);
+  background: var(--ev-dark-purple);
   border: none;
   cursor: pointer;
   border-radius: 8px;
