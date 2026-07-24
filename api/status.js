@@ -1,8 +1,15 @@
-exports.handler = async () => {
-  const status = {
-    gemini: !!process.env.GEMINI_API_KEY,
-    feedly: !!(process.env.FEEDLY_ACCESS_TOKEN && process.env.FEEDLY_STREAM_ID),
-    email: !!(process.env.RESEND_API_KEY && process.env.DIGEST_TO_EMAIL && process.env.DIGEST_FROM_EMAIL),
-  };
-  return { statusCode: 200, body: JSON.stringify(status) };
+// api/status.js
+module.exports = async (req, res) => {
+  try {
+    // If you had environment variable checks or logic, keep them here:
+    const clientConfig = process.env.CLIENT_CONFIG ? JSON.parse(process.env.CLIENT_CONFIG) : null;
+
+    res.status(200).json({
+      status: "ok",
+      configured: !!clientConfig,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
