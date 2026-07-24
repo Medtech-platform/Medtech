@@ -1,6 +1,10 @@
 {
   "rewrites": [
     {
+      "source": "/client-config.js",
+      "destination": "/api/client-config"
+    },
+    {
       "source": "/.netlify/functions/:path*",
       "destination": "/api/:path*"
     }
