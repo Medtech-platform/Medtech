@@ -1,3 +1,4 @@
+// api/client-config.js
 module.exports = (req, res) => {
   res.setHeader('Content-Type', 'application/javascript');
   const config = process.env.CLIENT_CONFIG || '{}';
