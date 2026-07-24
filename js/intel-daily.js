@@ -371,7 +371,39 @@ const IntelDaily = (() => {
   // ─────────────────────────────────────────────────────────────────────────
   function _renderArticles(filter) {
     _show('id-artsSec');
+// ─────────────────────────────────────────────────────────────────────────
+  // 10b. JSON REPORT LOADER (GitHub Actions static output)
+  // ─────────────────────────────────────────────────────────────────────────
+  async function _loadJsonReport() {
+    const container = document.getElementById('daily-report-container');
+    if (!container) return;
 
+    try {
+      const response = await fetch('/daily_report.json');
+      if (!response.ok) throw new Error('JSON report file not found');
+
+      const articles = await response.json();
+
+      if (!articles || !articles.length) {
+        container.innerHTML = '<div class="empty-state"><p>No daily reports available for today yet.</p></div>';
+        return;
+      }
+
+      container.innerHTML = articles.map((art) => `
+        <div class="intel-card" style="border: 1px solid #e0e0e0; padding: 16px; margin-bottom: 16px; border-radius: 8px; background: #fff;">
+          <h3 style="margin-top: 0; font-size: 1.1rem; color: #1f4e78;">
+            <a href="${_escapeHtml(art.link)}" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;">
+              ${_escapeHtml(art.title)}
+            </a>
+          </h3>
+          <p style="margin: 8px 0; color: #333; line-height: 1.5;">${_escapeHtml(art.summary)}</p>
+          <small style="color: #666; font-weight: 500;">${_escapeHtml(art.source_line)}</small>
+        </div>
+      `).join('');
+    } catch (err) {
+      console.warn('Could not load daily_report.json:', err);
+    }
+  }
     const high = _articles.filter((a) => a.relevance === 'high').length;
     _setText('id-artCountLbl', `${_articles.length} articles · ${high} high relevance`);
 
