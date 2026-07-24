@@ -537,6 +537,7 @@ const IntelDaily = (() => {
       // Still refresh dynamic content (date, client name) on re-entry
       _renderHeaderDate();
       _renderSourceList();
+      _loadJsonReport();
       return;
     }
 
