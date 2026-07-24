@@ -3,36 +3,36 @@
 // ─────────────────────────────────────────────────────────────────────────
 // ARCHITECTURE NOTES (plain English):
 //
-//  • This file powers the "DNL Daily" report (and any equivalent daily/
-//    weekly intelligence report for any client on the platform).
+//   • This file powers the "DNL Daily" report (and any equivalent daily/
+//     weekly intelligence report for any client on the platform).
 //
-//  • WHAT LIVES HERE:
-//      – UI rendering (article cards, tabs, email preview, progress steps)
-//      – Calls to Netlify serverless functions that do the real work
-//        (fetching RSS feeds, scoring with AI, sending email)
-//      – Tab/filter navigation specific to this module
+//   • WHAT LIVES HERE:
+//       – UI rendering (article cards, tabs, email preview, progress steps)
+//       – Calls to Netlify serverless functions that do the real work
+//         (fetching RSS feeds, scoring with AI, sending email)
+//       – Tab/filter navigation specific to this module
 //
-//  • WHAT DOES NOT LIVE HERE:
-//      – API keys           → Netlify environment variables only
-//      – Client names       → window.CLIENT_CONFIG (set by client-config.js)
-//      – Search strings     → window.CLIENT_CONFIG.searchStrings
-//      – Competitor lists   → window.CLIENT_CONFIG.competitors
-//      – RSS feed URLs      → window.CLIENT_CONFIG.rssFeeds
-//      – Scoring rules      → defaults come from CLIENT_CONFIG; user can
-//                             override per-session via the Rules tab and
-//                             those overrides are stored in localStorage
-//                             under a key that includes the client key
-//                             (so Client A's rules never bleed into Client B)
-//      – Passwords / emails → never in frontend code; Netlify functions only
+//   • WHAT DOES NOT LIVE HERE:
+//       – API keys            → Netlify environment variables only
+//       – Client names        → window.CLIENT_CONFIG (set by client-config.js)
+//       – Search strings      → window.CLIENT_CONFIG.searchStrings
+//       – Competitor lists    → window.CLIENT_CONFIG.competitors
+//       – RSS feed URLs       → window.CLIENT_CONFIG.rssFeeds
+//       – Scoring rules       → defaults come from CLIENT_CONFIG; user can
+//                               override per-session via the Rules tab and
+//                               those overrides are stored in localStorage
+//                               under a key that includes the client key
+//                               (so Client A's rules never bleed into Client B)
+//       – Passwords / emails → never in frontend code; Netlify functions only
 //
-//  • MULTI-TENANT RULE ISOLATION:
-//      localStorage keys are namespaced as  mm_intel_rules_<clientKey>
-//      so switching clients gives a fresh rule set, not the previous
-//      client's configuration.
+//   • MULTI-TENANT RULE ISOLATION:
+//       localStorage keys are namespaced as  mm_intel_rules_<clientKey>
+//       so switching clients gives a fresh rule set, not the previous
+//       client's configuration.
 //
-//  • Every Netlify function call passes the active clientKey in the
-//    request body so the server knows which client's config to load
-//    from environment variables.
+//   • Every Netlify function call passes the active clientKey in the
+//     request body so the server knows which client's config to load
+//     from environment variables.
 //
 // ═══════════════════════════════════════════════════════════════════════════
 
@@ -371,39 +371,7 @@ const IntelDaily = (() => {
   // ─────────────────────────────────────────────────────────────────────────
   function _renderArticles(filter) {
     _show('id-artsSec');
-// ─────────────────────────────────────────────────────────────────────────
-  // 10b. JSON REPORT LOADER (GitHub Actions static output)
-  // ─────────────────────────────────────────────────────────────────────────
-  async function _loadJsonReport() {
-    const container = document.getElementById('daily-report-container');
-    if (!container) return;
 
-    try {
-      const response = await fetch('/daily_report.json');
-      if (!response.ok) throw new Error('JSON report file not found');
-
-      const articles = await response.json();
-
-      if (!articles || !articles.length) {
-        container.innerHTML = '<div class="empty-state"><p>No daily reports available for today yet.</p></div>';
-        return;
-      }
-
-      container.innerHTML = articles.map((art) => `
-        <div class="intel-card" style="border: 1px solid #e0e0e0; padding: 16px; margin-bottom: 16px; border-radius: 8px; background: #fff;">
-          <h3 style="margin-top: 0; font-size: 1.1rem; color: #1f4e78;">
-            <a href="${_escapeHtml(art.link)}" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;">
-              ${_escapeHtml(art.title)}
-            </a>
-          </h3>
-          <p style="margin: 8px 0; color: #333; line-height: 1.5;">${_escapeHtml(art.summary)}</p>
-          <small style="color: #666; font-weight: 500;">${_escapeHtml(art.source_line)}</small>
-        </div>
-      `).join('');
-    } catch (err) {
-      console.warn('Could not load daily_report.json:', err);
-    }
-  }
     const high = _articles.filter((a) => a.relevance === 'high').length;
     _setText('id-artCountLbl', `${_articles.length} articles · ${high} high relevance`);
 
@@ -440,6 +408,40 @@ const IntelDaily = (() => {
           </div>
         </div>
       </div>`).join('');
+  }
+
+  // ─────────────────────────────────────────────────────────────────────────
+  // 10b. JSON REPORT LOADER (GitHub Actions static output)
+  // ─────────────────────────────────────────────────────────────────────────
+  async function _loadJsonReport() {
+    const container = document.getElementById('daily-report-container');
+    if (!container) return;
+
+    try {
+      const response = await fetch('/daily_report.json');
+      if (!response.ok) throw new Error('JSON report file not found');
+
+      const articles = await response.json();
+
+      if (!articles || !articles.length) {
+        container.innerHTML = '<div class="empty-state"><p>No daily reports available for today yet.</p></div>';
+        return;
+      }
+
+      container.innerHTML = articles.map((art) => `
+        <div class="intel-card" style="border: 1px solid #e0e0e0; padding: 16px; margin-bottom: 16px; border-radius: 8px; background: #fff;">
+          <h3 style="margin-top: 0; font-size: 1.1rem; color: #1f4e78;">
+            <a href="${_escapeHtml(art.link)}" target="_blank" rel="noopener noreferrer" style="text-decoration: none; color: inherit;">
+              ${_escapeHtml(art.title)}
+            </a>
+          </h3>
+          <p style="margin: 8px 0; color: #333; line-height: 1.5;">${_escapeHtml(art.summary)}</p>
+          <small style="color: #666; font-weight: 500;">${_escapeHtml(art.source_line)}</small>
+        </div>
+      `).join('');
+    } catch (err) {
+      console.warn('Could not load daily_report.json:', err);
+    }
   }
 
   // ─────────────────────────────────────────────────────────────────────────
@@ -525,7 +527,7 @@ const IntelDaily = (() => {
     if (!body) return;
     navigator.clipboard.writeText(body.textContent)
       .then(()  => MM.toast('📋 Copied to clipboard'))
-      .catch(()  => MM.toast('⚠️ Copy failed — try selecting the text manually'));
+      .catch(() => MM.toast('⚠️ Copy failed — try selecting the text manually'));
   }
 
   // ─────────────────────────────────────────────────────────────────────────
@@ -546,6 +548,7 @@ const IntelDaily = (() => {
     _loadRules();
     _renderSourceList();
     _checkStatus();
+    _loadJsonReport();
 
     // ── Button bindings (all within the partial; no global listeners needed)
     const bind = (id, fn) => {
